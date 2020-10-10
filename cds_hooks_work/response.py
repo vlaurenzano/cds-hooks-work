@@ -32,16 +32,19 @@ class Card(object):
 
 
 class Response(object):
-
-    def __init__(self, cards=None, statusCode=None):
-        if cards is None:
-            self.cards = []
-        if statusCode is None:
-            self.httpStatusCode = 0
-
     cards: List[Card]
     systemActions: str
     httpStatusCode: int  # any http code but mainly 200 or 412: The CDS Service is unable to retrieve the necessary FHIR data to execute its decision support, either through a prefetch request or directly calling the FHIR server.
+    message: str
+
+    def __init__(self, cards=None, statusCode: int = None):
+        if cards is None:
+            self.cards = []
+        if statusCode is None:
+            self.httpStatusCode = 200
+        else:
+            self.httpStatusCode = statusCode
+
 
     def to_dict(self) -> (dict, int):
         return {"cards": [c.to_dict() for c in self.cards]}

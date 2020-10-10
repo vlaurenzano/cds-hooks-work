@@ -33,13 +33,12 @@ class ServicesTest(unittest.TestCase):
         d = services.discovery()
         j = json.dumps(d)
         self.assertEqual(
-            '{"services": [{"hook": "hook", "id": "id", "description": "desc", "title": "", "prefetch": ""}]}', j)
+            '{"services": [{"hook": "hook", "id": "id", "description": "desc", "title": "", "prefetch": {}}]}', j)
 
 
 class AppTest(unittest.TestCase):
     def test_app(self):
-        def handler(r: PatientViewRequest) -> Response:
-            resp = Response()
+        def handler(r: PatientViewRequest, resp) -> Response:
             resp.cards = [Card.info("my summary", "my source")]
             return resp
 
@@ -58,15 +57,14 @@ class AppTest(unittest.TestCase):
         app = App()
 
         @app.patient_view("myid", "mydesc")
-        def handler(r: PatientViewRequest) -> Response:
-            resp = Response()
-            resp.cards = [Card.info("my summary", "my source")]
-            return resp
+        def handler(req: PatientViewRequest, response: Response):
+            response.cards = [Card.info("my summary", "my source")]
+
 
         input = json.loads(patient_view_stub_json)
         response = app.handle_hook("myid", input)
 
-        self.assertIsInstance(response, Response)
+        self.assertEqual(response.httpStatusCode, 200)
         self.assertEqual(response.cards[0].summary, "my summary")
 
 

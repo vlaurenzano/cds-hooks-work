@@ -3,8 +3,8 @@ from cds_hooks_work.request import Request, PatientViewRequest
 from cds_hooks_work.response import Response
 from collections.abc import Callable
 
-HookHandler = callable([Request, Response])
-PatientViewHandler = callable([PatientViewRequest, Response])
+HookHandler = callable([[Request, Response]])
+PatientViewHandler = callable([[PatientViewRequest, Response]])
 
 
 class Service(object):
@@ -12,17 +12,21 @@ class Service(object):
     hook: str  # REQUIRED	string	The hook this service should be invoked on. See Hooks.
     id: str  # REQUIRED	string	The {id} portion of the URL to this service which is available at {baseUrl}/cds-services/{id}
     description: str  # REQUIRED	string	The description of this service.
-    title: str = ""  # RECOMMENDED	string	The human-friendly name of this service.
-    prefetch: object = ""  # optional
+    title: str  # RECOMMENDED	string	The human-friendly name of this service.
+    prefetch: object  # optional
     handler: HookHandler
 
-    def __init__(self, hook, id, description, title="", prefetch="", handler: HookHandler = None):
+    def __init__(self, hook, id, description, title="", prefetch=None, handler: HookHandler = None):
         self.hook = hook
         self.id = id
         self.description = description
         self.title = title
-        self.prefetch = prefetch
-        self.handler = handler
+        if prefetch is not None:
+            self.prefetch = prefetch
+        else:
+            self.prefetch = {}
+        if handler is not None:
+            self.handler = handler
 
     def to_dict(self):
         return {
@@ -37,12 +41,15 @@ class Service(object):
         self.handler = handler
 
     @staticmethod
-    def patient_view(id: str, description: str, handler: HookHandler, title: str = "", prefetch: str = ""):
+    def patient_view(id: str, description: str, handler: HookHandler, title: str = "", prefetch: object = None):
         return Service("patient-view", id, description, title=title, prefetch=prefetch, handler=handler)
 
     def handle_input(self, request_dict: dict):
+        response = Response(statusCode=200) #set a response with a default status code
+
         if self.hook == 'patient-view':
             request = PatientViewRequest(request_dict)
-            return self.handler(request)
+            self.handler(request, response)
+            return response
         else:
             raise NotImplemented
