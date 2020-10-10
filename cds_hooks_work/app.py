@@ -1,5 +1,6 @@
 from cds_hooks_work.service import Service
 from cds_hooks_work.response import Response
+from cds_hooks_work.server import serve
 from typing import List
 
 
@@ -25,7 +26,19 @@ class App(object):
                 for service in self.services:
                     if hook == service.hook and id == service.id:
                         return service.handle_input(input)
-                #message = f"service with id: {id} and hook {hook} not found"
+                # message = f"service with id: {id} and hook {hook} not found"
             return Response(statusCode=400)
         except Exception as e:
             return Response(statusCode=500)
+
+    def patient_view(self, id: str, description: str, **kwargs):
+        """ decorator that does the same thing as register service"""
+
+        def decorator(handler):
+            self.register_service(Service.patient_view(id, description, handler, **kwargs))
+            return handler
+
+        return decorator
+
+    def serv(self, **kwargs):
+        serve(self, **kwargs)

@@ -1,9 +1,7 @@
 from flask import Flask, json, request
 from flask_cors import CORS
-import os
-from cds_hooks_work.app import App
 
-def serve(app: App, **kwargs):
+def serve(app, **kwargs):
     flaskApp = Flask(__name__)
     CORS(flaskApp)
 
@@ -13,11 +11,10 @@ def serve(app: App, **kwargs):
 
     @flaskApp.route('/cds-services/<id>', methods=['POST'])
     def service(id):
-
         requestData = request.json
         try:
             response = app.handle_hook(id, requestData)
-            return "ok", 200
+            return response.to_dict()
         except:
             return "client error", 400
 

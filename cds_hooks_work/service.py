@@ -46,13 +46,3 @@ class Service(object):
             return self.handler(request)
         else:
             raise NotImplemented
-
-
-class Services(object):
-    services: List[Service] = []
-
-    def register_service(self, service: Service):
-        self.services.append(service)
-
-    def to_dict(self):
-        return {"services": [s.to_dict() for s in self.services]}

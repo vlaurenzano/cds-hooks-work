@@ -28,9 +28,9 @@ class ResponseTest(unittest.TestCase):
 class ServicesTest(unittest.TestCase):
     def test_serialize(self):
         service = Service("hook", "id", "desc")
-        services = Services()
+        services = App()
         services.register_service(service)
-        d = services.to_dict()
+        d = services.discovery()
         j = json.dumps(d)
         self.assertEqual(
             '{"services": [{"hook": "hook", "id": "id", "description": "desc", "title": "", "prefetch": ""}]}', j)
@@ -53,6 +53,22 @@ class AppTest(unittest.TestCase):
 
         self.assertIsInstance(response, Response)
         self.assertEqual(response.cards[0].summary, "my summary")
+
+    def test_app_decorators(self):
+        app = App()
+
+        @app.patient_view("myid", "mydesc")
+        def handler(r: PatientViewRequest) -> Response:
+            resp = Response()
+            resp.cards = [Card.info("my summary", "my source")]
+            return resp
+
+        input = json.loads(patient_view_stub_json)
+        response = app.handle_hook("myid", input)
+
+        self.assertIsInstance(response, Response)
+        self.assertEqual(response.cards[0].summary, "my summary")
+
 
 
 if __name__ == '__main__':
