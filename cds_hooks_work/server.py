@@ -14,7 +14,8 @@ def serve(app, **kwargs):
         requestData = request.json
         try:
             response = app.handle_hook(id, requestData)
-            return response.to_dict()
+            body = response.to_dict()
+            return json.jsonify(body), response.httpStatusCode
         except:
             return "client error", 400
 

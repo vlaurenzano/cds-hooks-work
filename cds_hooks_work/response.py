@@ -44,4 +44,4 @@ class Response(object):
     httpStatusCode: int  # any http code but mainly 200 or 412: The CDS Service is unable to retrieve the necessary FHIR data to execute its decision support, either through a prefetch request or directly calling the FHIR server.
 
     def to_dict(self) -> (dict, int):
-        return {"cards": [c.to_dict() for c in self.cards]}, self.httpStatusCode
+        return {"cards": [c.to_dict() for c in self.cards]}
