@@ -5,6 +5,7 @@ from cds_hooks_work.app import App
 
 def serve(app: App, **kwargs):
     flaskApp = Flask(__name__)
+    CORS(flaskApp)
 
     @flaskApp.route('/cds-services')
     def discovery():
