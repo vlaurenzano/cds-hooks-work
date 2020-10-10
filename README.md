@@ -27,3 +27,10 @@ if __name__ == '__main__':
 View the preceeding example in action on the [cds-hooks-sandbox](https://sandbox.cds-hooks.org/?serviceDiscoveryURL=https://test-cds-service.herokuapp.com/cds-services), as implemented by this [demo application](https://github.com/vlaurenzano/cds-hooks-works-exampe)
 
 
+### Request Models 
+
+The app unpacks the response from the CDS client according to the specifications given for the particular cds-hook. There is a parent `Request` model that holds all top level values, such as hook, authorization, prefetch. The `Request` model is extended for specific hook types to provide specific `context` models, such as the `PatientViewRequest` model which holds a reference to the `PatientViewContext` model.        
+
+### Response models
+
+The response models are hydrated by the user specified callbacks. There is only one top level `Response` object that contains fields for `Cards and Actions` as well as a status code. The fields for individual cards refer to simple and complex types, implemented according to the [cds-hooks spec](https://cds-hooks.org/specification/current/#http-response).   
