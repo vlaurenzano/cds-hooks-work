@@ -31,17 +31,19 @@ class Request(object):
     def set_hooks(self, req: dict):
         self.hook = req["hook"]
         self.hookInstance = req["hookInstance"]
+        return self
 
     def set_auth(self, req: dict):
         if "fhirServer" in req:
             self.fhirServer = req["fhirServer"]
         if "fhirAuthorization" in req:  # if it's defined it can fail
             self.fhirAuthorization = FHIRAuthorization(**req["fhirAuthorization"])
+        return self
 
     def set_prefetch(self, req: dict):
         if "prefetch" in req:
             self.prefetch = req["prefetch"]
-
+        return self
 
 @dataclass
 class PatientViwContext(object):
@@ -50,7 +52,7 @@ class PatientViwContext(object):
     encounterId: str = ""  # OPTIONAL: The FHIR Encounter.id of the current encounter in context
 
 
-class PatientView(Request):
+class PatientViewRequest(Request):
     context: PatientViwContext
 
     def __init__(self, request_dict: dict):

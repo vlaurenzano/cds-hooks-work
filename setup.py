@@ -19,4 +19,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.7',
+    install_requires=['Flask==1.1.2', 'Flask-Cors==3.0.9'],
 )

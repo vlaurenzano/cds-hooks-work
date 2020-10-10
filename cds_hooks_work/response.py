@@ -1,4 +1,5 @@
 from dataclasses import asdict, dataclass
+from typing import List
 
 
 @dataclass
@@ -26,9 +27,22 @@ class Card(object):
     def critical(summary, source, **kwargs):
         return Card("critical", summary, source, **kwargs)
 
+    def to_dict(self):
+        return asdict(self)
+
 
 class Response(object):
-    cards: Card
+
+    def __init__(self, cards=None, statusCode=None):
+        if cards is None:
+            self.cards = []
+        if statusCode is None:
+            self.httpStatusCode = 0
+
+    cards: List[Card]
     systemActions: str
     httpStatusCode: int  # any http code but mainly 200 or 412: The CDS Service is unable to retrieve the necessary FHIR data to execute its decision support, either through a prefetch request or directly calling the FHIR server.
 
+    def to_dict(self) -> (dict, int):
+        d = {"cards": [c.to_dict() for c in self.cards]}, self.httpStatusCode
+        return d
