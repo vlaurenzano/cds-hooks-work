@@ -33,7 +33,7 @@ class ServicesTest(unittest.TestCase):
         d = services.to_dict()
         j = json.dumps(d)
         self.assertEqual(
-            '{"services": {"hook": "hook", "id": "id", "description": "desc", "title": "", "prefetch": ""}}', j)
+            '{"services": [{"hook": "hook", "id": "id", "description": "desc", "title": "", "prefetch": ""}]}', j)
 
 
 class AppTest(unittest.TestCase):
@@ -49,7 +49,7 @@ class AppTest(unittest.TestCase):
         app.register_service(pv_service)
 
         input = json.loads(patient_view_stub_json)
-        response = app.handle_hook("myid", "patient-view", input)
+        response = app.handle_hook("myid", input)
 
         self.assertIsInstance(response, Response)
         self.assertEqual(response.cards[0].summary, "my summary")

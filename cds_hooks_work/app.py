@@ -16,7 +16,7 @@ class App(object):
         self.services.append(service)
 
     def discovery(self):
-        return {"services": s.to_dict() for s in self.services}
+        return {"services": [s.to_dict() for s in self.services]}
 
     def handle_hook(self, id: str, input: dict) -> Response:
         try:

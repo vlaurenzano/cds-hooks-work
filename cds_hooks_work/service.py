@@ -55,4 +55,4 @@ class Services(object):
         self.services.append(service)
 
     def to_dict(self):
-        return {"services": s.to_dict() for s in self.services}
+        return {"services": [s.to_dict() for s in self.services]}
