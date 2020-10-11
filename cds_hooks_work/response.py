@@ -46,7 +46,7 @@ class Card(object):
     # https://cds-hooks.org/specification/current/#card-attributes
     indicator: str  # REQUIRED	string	Urgency/importance of what this card conveys. Allowed values, in order of increasing urgency, are: info, warning, critical. The CDS Client MAY use this field to help make UI display decisions such as sort order or coloring.
     summary: str  # REQUIRED	string	One-sentence, <140-character summary message for display to the user inside of this card.
-    source: str  # REQUIRED	object	Grouping structure for the Source of the information displayed on this card. The source should be the primary source of guidance for the decision support the card represents.
+    source: Source  # REQUIRED	object	Grouping structure for the Source of the information displayed on this card. The source should be the primary source of guidance for the decision support the card represents.
     uuid: str = None  # OPTIONAL	string	Unique identifier of the card. MAY be used for auditing and logging cards and SHALL be included in any subsequent calls to the CDS service's feedback endpoint.
     detail: str = None  # OPTIONAL	string	Optional detailed information to display; if provided MUST be represented in (GitHub Flavored) Markdown. (For non-urgent cards, the CDS Client MAY hide these details until the user clicks a link like "view more details...").
     suggestions: List[Suggestion] = field(
@@ -58,7 +58,7 @@ class Card(object):
         Link] = None  # OPTIONAL array of Links	Allows a service to suggest a link to an app that the user might want to run for additional information or to help guide a decision.
 
     @staticmethod
-    def info(summary, source, **kwargs):
+    def info(summary: str, source: Source, **kwargs):
         return Card("info", summary, source, **kwargs)
 
     @staticmethod
