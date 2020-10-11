@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
 ```
 
-View the preceeding example in action on the [cds-hooks-sandbox](https://sandbox.cds-hooks.org/?serviceDiscoveryURL=https://test-cds-service.herokuapp.com/cds-services), as implemented by this [demo application](https://github.com/vlaurenzano/cds-hooks-works-exampe)
+View the preceeding example in action on the [cds-hooks-sandbox](https://sandbox.cds-hooks.org/?serviceDiscoveryURL=https://test-cds-service.herokuapp.com/cds-services), as implemented by this [demo application](https://github.com/vlaurenzano/cds-hooks-works-example)
 
 
 ### Request Models 
