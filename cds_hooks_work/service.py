@@ -40,10 +40,6 @@ class Service(object):
     def set_handler(self, handler: Callable):
         self.handler = handler
 
-    @staticmethod
-    def patient_view(id: str, description: str, handler: HookHandler, title: str = "", prefetch: object = None):
-        return Service("patient-view", id, description, title=title, prefetch=prefetch, handler=handler)
-
     def handle_input(self, request_dict: dict):
         response = Response(statusCode=200) #set a response with a default status code
 

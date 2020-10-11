@@ -42,7 +42,8 @@ class AppTest(unittest.TestCase):
             resp.cards = [Card.info("my summary", "my source")]
             return resp
 
-        pv_service = Service.patient_view("myid", "mydesc", handler)
+        pv_service = Service("patient-view", "myid", "mydesc", handler=handler)
+
 
         app = App()
         app.register_service(pv_service)

@@ -1,5 +1,5 @@
-from dataclasses import asdict, dataclass
-import json
+from dataclasses import dataclass
+from typing import List
 
 
 class RequestValidationException(Exception):
@@ -45,6 +45,7 @@ class Request(object):
             self.prefetch = req["prefetch"]
         return self
 
+
 @dataclass
 class PatientViwContext(object):
     userId: str  # REQUIRED: The id of the current user
@@ -58,6 +59,104 @@ class PatientViewRequest(Request):
     def __init__(self, request_dict: dict):
         try:
             self.context = PatientViwContext(**request_dict["context"])
+            self.hydrate(request_dict)
+        except Exception as e:
+            raise RequestValidationException from e
+
+
+@dataclass
+class OrderSelectContext(object):
+    userId: str  # REQUIRED: The id of the current user
+    patientId: str  # REQUIRED: The FHIR Patient.id of the current patient in context
+    selections: List  # REQUIRED	No	array	The FHIR id of the newly selected order(s). The selections field references FHIR resources in the draftOrders Bundle. For example, MedicationRequest/103.
+    draftOrders: object  # DSTU2 - FHIR Bundle of MedicationOrder, DiagnosticOrder, DeviceUseRequest, ReferralRequest, ProcedureRequest, NutritionOrder, VisionPrescription with draft status
+    # STU3 - FHIR Bundle of MedicationRequest, ReferralRequest, ProcedureRequest, NutritionOrder, VisionPrescription with draft status
+    # R4 - FHIR Bundle of MedicationRequest, NutritionOrder, ServiceRequest, VisionPrescription with draft status
+    encounterId: str = ""  # OPTIONAL: The FHIR Encounter.id of the current encounter in context
+
+
+class OrderSelectRequest(Request):
+    context: OrderSelectContext
+
+    def __init__(self, request_dict: dict):
+        try:
+            self.context = OrderSelectContext(**request_dict["context"])
+            self.hydrate(request_dict)
+        except Exception as e:
+            raise RequestValidationException from e
+
+
+@dataclass
+class OrderSignContext(object):
+    userId: str  # REQUIRED: The id of the current user.For this hook, the user is expected to be of type Practitioner or PractitionerRole. For example, PractitionerRole/123 or Practitioner/abc.
+    patientId: str  # REQUIRED: The FHIR Patient.id of the current patient in context
+    draftOrders: object  # DSTU2 - FHIR Bundle of MedicationOrder, DiagnosticOrder, DeviceUseRequest, ReferralRequest, ProcedureRequest, NutritionOrder, VisionPrescription with draft status
+    # STU3 - FHIR Bundle of MedicationRequest, ReferralRequest, ProcedureRequest, NutritionOrder, VisionPrescription with draft status
+    # R4 - FHIR Bundle of MedicationRequest, NutritionOrder, ServiceRequest, VisionPrescription with draft status
+    encounterId: str = ""  # OPTIONAL: The FHIR Encounter.id of the current encounter in context
+
+
+class OrderSignRequest(Request):
+    context: OrderSignContext
+
+    def __init__(self, request_dict: dict):
+        try:
+            self.context = OrderSignContext(**request_dict["context"])
+            self.hydrate(request_dict)
+        except Exception as e:
+            raise RequestValidationException from e
+
+
+@dataclass
+class AppointmentBookContext(object):
+    userId: str  # REQUIRED: The id of the current user
+    patientId: str  # REQUIRED: The FHIR Patient.id of the current patient in context
+    appointments: object  # REQUIRED	Yes	string	The FHIR Patient.id of Patient appointment(s) is/are for
+    encounterId: str = ""  # OPTIONAL: The FHIR Encounter.id of the current encounter in context
+
+
+class AppointmentBookRequest(Request):
+    context: AppointmentBookContext
+
+    def __init__(self, request_dict: dict):
+        try:
+            self.context = AppointmentBookContext(**request_dict["context"])
+            self.hydrate(request_dict)
+        except Exception as e:
+            raise RequestValidationException from e
+
+
+@dataclass
+class EncounterStartContext(object):
+    userId: str  # REQUIRED: The id of the current user
+    patientId: str  # REQUIRED: The FHIR Patient.id of the current patient in context
+    encounterId: str  # REQUIRED: The FHIR Encounter.id of the current encounter in context
+
+
+class EncounterStartRequest(Request):
+    context: EncounterStartContext
+
+    def __init__(self, request_dict: dict):
+        try:
+            self.context = EncounterStartContext(**request_dict["context"])
+            self.hydrate(request_dict)
+        except Exception as e:
+            raise RequestValidationException from e
+
+
+@dataclass
+class EncounterDischargeContext(object):
+    userId: str  # REQUIRED: The id of the current user
+    patientId: str  # REQUIRED: The FHIR Patient.id of the current patient in context
+    encounterId: str  # REQUIRED: The FHIR Encounter.id of the current encounter in context
+
+
+class EncounterDischargeRequest(Request):
+    context: EncounterDischargeContext
+
+    def __init__(self, request_dict: dict):
+        try:
+            self.context = EncounterDischargeContext(**request_dict["context"])
             self.hydrate(request_dict)
         except Exception as e:
             raise RequestValidationException from e

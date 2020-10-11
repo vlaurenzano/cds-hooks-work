@@ -31,14 +31,33 @@ class App(object):
         except Exception as e:
             return Response(statusCode=500)
 
-    def patient_view(self, id: str, description: str, **kwargs):
-        """ decorator that does the same thing as register service"""
+    def _handler_decorator(self, service_type, id: str, description: str, **kwargs):
+        """decorator that creates a services and registers it"""
 
         def decorator(handler):
-            self.register_service(Service.patient_view(id, description, handler, **kwargs))
+            kwargs["handler"] = handler
+            self.register_service(Service(service_type, id, description, **kwargs))
             return handler
 
         return decorator
 
-    def serv(self, **kwargs):
+    def patient_view(self, *args, **kwargs):
+        return self._handler_decorator("patient-view", *args, **kwargs)
+
+    def order_select(self, *args, **kwargs):
+        return self._handler_decorator("order-select", *args, **kwargs)
+
+    def order_sign(self, *args, **kwargs):
+        return self._handler_decorator("order-sign", *args, **kwargs)
+
+    def appointment_book(self, *args, **kwargs):
+        return self._handler_decorator("appointment-book", *args, **kwargs)
+
+    def encounter_start(self, *args, **kwargs):
+        return self._handler_decorator("encounter-start", *args, **kwargs)
+
+    def encounter_discharge(self, *args, **kwargs):
+        return self._handler_decorator("encounter-discharge", *args, **kwargs)
+
+    def serve(self, **kwargs):
         serve(self, **kwargs)

@@ -34,3 +34,12 @@ The app unpacks the response from the CDS client according to the specifications
 ### Response models
 
 The response models are hydrated by the user specified callbacks. There is only one top level `Response` object that contains fields for `Cards and Actions` as well as a status code. The fields for individual cards refer to simple and complex types, implemented according to the [cds-hooks spec](https://cds-hooks.org/specification/current/#http-response).   
+
+
+### TODO
+
+* The CDS service workflow if fully modeled except for a `feedback` endpoint. This is an endpoint intended for CDS Client (EHRs) to return feedback about whether the card was accepted or ignored.
+ 
+* Prefetch queries must currently be specified as raw dicts, some classes and helper methods would ensure validity and ease of use. 
+
+* The framework captures FHIR authorization values, but has no built in mechanism to use them in an fhir query. Future iterations may include [fhir-py](https://github.com/beda-software/fhir-py) to assist with making fhir queries.      
