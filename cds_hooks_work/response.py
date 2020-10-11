@@ -77,6 +77,11 @@ class Card(object):
     def critical(summary, source, **kwargs):
         return Card("critical", summary, source, **kwargs)
 
+    def add_link(self, link: Link):
+        if self.links is None:
+            self.links = []
+        self.links.append(link)
+
     def to_dict(self):
         return asdict(self)
 
