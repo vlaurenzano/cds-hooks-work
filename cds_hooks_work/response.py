@@ -40,6 +40,14 @@ class Link(object):
     type: str  # REQUIRED	string	The type of the given URL. There are two possible values for this field. A type of absolute indicates that the URL is absolute and should be treated as-is. A type of smart indicates that the URL is a SMART app launch URL and the CDS Client should ensure the SMART app launch URL is populated with the appropriate SMART launch parameters.
     appContext: str = ""  # OPTIONAL	string	An optional field that allows the CDS Service to share information from the CDS card with a subsequently launched SMART app. The appContext field should only be valued if the link type is smart and is not valid for absolute links. The appContext field and value will be sent to the SMART app as part of the OAuth 2.0 access token response, alongside the other SMART launch parameters when the SMART app is launched. Note that appContext could be escaped JSON, base64 encoded XML, or even a simple string, so long as the SMART app can recognize it.
 
+    @staticmethod
+    def absolute(label: str, url: str, appContext: str = ""):
+        return Link(label, url, "absolute", appContext=appContext)
+
+    @staticmethod
+    def smart(label: str, url: str, appContext: str = ""):
+        return Link(label, url, "smart", appContext=appContext)
+
 
 @dataclass
 class Card(object):
@@ -86,6 +94,9 @@ class Response(object):
             self.httpStatusCode = 200
         else:
             self.httpStatusCode = statusCode
+
+    def add_card(self, card: Card):
+        self.cards.append(card)
 
     def to_dict(self) -> (dict, int):
         return {"cards": [c.to_dict() for c in self.cards]}

@@ -12,7 +12,7 @@ app = cds.App()
 
 
 @app.patient_view("patient-greeting", "The patient greeting service greets a patient!", title="Patient Greeter")
-def greeting(r: cds.PatientViewRequest, response: cds.Response) -> cds.Response:
+def greeting(r: cds.PatientViewRequest, response: cds.Response):
     response.cards = [cds.Card.info("hello world!", "demo_service")]
     response.httpStatusCode = 200
 
