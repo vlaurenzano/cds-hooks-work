@@ -13,7 +13,9 @@ app = cds.App()
 
 @app.patient_view("patient-greeting", "The patient greeting service greets a patient!", title="Patient Greeter")
 def greeting(r: cds.PatientViewRequest, response: cds.Response):
-    response.cards = [cds.Card.info("hello world!", "demo_service")]
+    card = cds.Card.info("hello world!", cds.Source("demo_service"))
+    card.add_link(cds.Link.absolute("cds-hooks-work", "https://github.com/vlaurenzano/cds-hooks-work"))
+    response.add_card(card)
     response.httpStatusCode = 200
 
 
@@ -24,7 +26,7 @@ if __name__ == '__main__':
 
 ```
 
-View the preceeding example in action on the [cds-hooks-sandbox](https://sandbox.cds-hooks.org/?serviceDiscoveryURL=https://test-cds-service.herokuapp.com/cds-services), as implemented by this [demo application](https://github.com/vlaurenzano/cds-hooks-works-example)
+View the preceeding example in action on the [cds-hooks-sandbox](https://sandbox.cds-hooks.org/?serviceDiscoveryURL=https://test-cds-service.herokuapp.com/cds-services), as implemented by this [demo application](https://github.com/vlaurenzano/cds-hooks-work-example)
 
 
 ### Request Models 
