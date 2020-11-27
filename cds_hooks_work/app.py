@@ -14,7 +14,7 @@ class App(object):
             self.services = []
         else:
             self.services = services
-        server = init(self)
+        self.server = init(self)
 
     def register_service(self, service: Service):
         self.services.append(service)
