@@ -1,17 +1,20 @@
 from cds_hooks_work.service import Service
 from cds_hooks_work.response import Response
-from cds_hooks_work.server import serve
+from cds_hooks_work.server import init, serve
 from typing import List
+from flask import Flask
 
 
 class App(object):
     services: List[Service] = []
+    server: Flask
 
     def __init__(self, services: List[Service] = None):
         if services is None:
             self.services = []
         else:
             self.services = services
+        server = init(self)
 
     def register_service(self, service: Service):
         self.services.append(service)
@@ -60,4 +63,4 @@ class App(object):
         return self._handler_decorator("encounter-discharge", *args, **kwargs)
 
     def serve(self, **kwargs):
-        serve(self, **kwargs)
+        serve(**kwargs)

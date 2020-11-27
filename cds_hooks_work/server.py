@@ -1,8 +1,10 @@
 from flask import Flask, json, request
 from flask_cors import CORS
 
-def serve(app, **kwargs):
-    flaskApp = Flask(__name__)
+flaskApp = Flask(__name__)
+
+
+def init(app):
     CORS(flaskApp)
 
     @flaskApp.route('/cds-services')
@@ -19,4 +21,8 @@ def serve(app, **kwargs):
         except:
             return "client error", 400
 
+    return flaskApp
+
+
+def serve(**kwargs):
     flaskApp.run(**kwargs)

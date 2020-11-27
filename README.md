@@ -40,7 +40,7 @@ The response models are hydrated by the user specified callbacks. There is only 
 
 ### TODO
 
-* The CDS service workflow if fully modeled except for a `feedback` endpoint. This is an endpoint intended for CDS Client (EHRs) to return feedback about whether the card was accepted or ignored.
+* The CDS service workflow if fully modeled except for the draft `feedback` endpoint. This is an endpoint intended for CDS Client (EHRs) to return feedback about whether the card was accepted or ignored.
  
 * Prefetch queries must currently be specified as raw dicts, some classes and helper methods would ensure validity and ease of use. 
 
